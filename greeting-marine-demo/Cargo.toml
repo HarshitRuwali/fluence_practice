@@ -1,0 +1,15 @@
+[package]
+name = "greeting-marine-demo"
+version = "0.1.0"
+authors = ["Harshit Ruwali <harshitruwali@outlook.com>"]
+edition = "2021"
+
+[[bin]]
+name = "greeting_marine_demo"
+path = "src/main.rs"
+
+[dependencies]
+marine-rs-sdk = "0.10.1"
+
+[dev-dependencies]
+marine-rs-sdk-test = "0.11.1"
