@@ -12,5 +12,9 @@ deals:
   dealName:
     minWorkers: 1
     targetWorkers: 3
-    services: []
+    services: [ hello_world ]
     spells: []
+
+services:
+  hello_world:
+    get: src/services/hello_world

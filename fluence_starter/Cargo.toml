@@ -1,0 +1,2 @@
+[workspace]
+members = [ "src/services/hello_world/modules/hello_world" ]

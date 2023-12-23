@@ -1,0 +1,5 @@
+data Hello:
+  response: string
+
+service HelloWorld("hello_world"):
+  hello_world() -> Hello
