@@ -18,62 +18,62 @@ export helloWorld, helloWorldRemote, getInfo, getInfos
 -- -- example of running services deployed using `fluence deal deploy`
 -- -- with worker 'dealName' which has service 'MyService' with method 'greeting'
 
--- export runDeployedServices, showSubnet
+export runDeployedServices, showSubnet
 
--- data Answer:
-    -- answer: ?string
-    -- worker: Worker
+data Answer:
+    answer: ?string
+    worker: Worker
 
--- func runDeployedServices() -> []Answer:
-    -- deals <- Deals.get()
-    -- dealId = deals.dealName!.dealIdOriginal
-    -- answers: *Answer
-    -- on HOST_PEER_ID:
-        -- subnet <- Subnet.resolve(dealId)
-    -- if subnet.success == false:
-        -- Console.print(["Failed to resolve subnet: ", subnet.error])
+func runDeployedServices() -> []Answer:
+    deals <- Deals.get()
+    dealId = deals.dealName!.dealIdOriginal
+    answers: *Answer
+    on HOST_PEER_ID:
+        subnet <- Subnet.resolve(dealId)
+    if subnet.success == false:
+        Console.print(["Failed to resolve subnet: ", subnet.error])
 
-    -- for w <- subnet.workers:
-        -- if w.worker_id == nil:
-            -- answers <<- Answer(answer=nil, worker=w)
-        -- else:
-            -- on w.worker_id! via w.host_id:
-                -- answer <- MyService.greeting("fluence")
-                -- answers <<- Answer(answer=?[answer], worker=w)
+    for w <- subnet.workers:
+        if w.worker_id == nil:
+            answers <<- Answer(answer=nil, worker=w)
+        else:
+            on w.worker_id! via w.host_id:
+                answer <- HelloWorld.hello_world()
+                answers <<- Answer(answer=?[answer.response], worker=w)
 
-    -- <- answers
+    <- answers
 
--- data WorkerServices:
-    -- host_id: string
-    -- worker_id: ?string
-    -- services: ?[]string
+data WorkerServices:
+    host_id: string
+    worker_id: ?string
+    services: ?[]string
 
--- func showSubnet() -> []WorkerServices:
-    -- deals <- Deals.get()
-    -- dealId = deals.dealName!.dealIdOriginal
-    -- on HOST_PEER_ID:
-        -- subnet <- Subnet.resolve(dealId)
-    -- if subnet.success == false:
-        -- Console.print(["Failed to resolve subnet: ", subnet.error])
+func showSubnet() -> []WorkerServices:
+    deals <- Deals.get()
+    dealId = deals.dealName!.dealIdOriginal
+    on HOST_PEER_ID:
+        subnet <- Subnet.resolve(dealId)
+    if subnet.success == false:
+        Console.print(["Failed to resolve subnet: ", subnet.error])
 
-    -- services: *WorkerServices
-    -- for w <- subnet.workers:
-        -- if w.worker_id != nil:
-            -- on w.worker_id! via w.host_id:
-                -- -- get list of all services on this worker
-                -- srvs <- Srv.list()
+    services: *WorkerServices
+    for w <- subnet.workers:
+        if w.worker_id != nil:
+            on w.worker_id! via w.host_id:
+                -- get list of all services on this worker
+                srvs <- Srv.list()
 
-                -- -- gather aliases
-                -- aliases: *string
-                -- for s <- srvs:
-                    -- if s.aliases.length != 0:
-                        -- aliases <<- s.aliases[0]
+                -- gather aliases
+                aliases: *string
+                for s <- srvs:
+                    if s.aliases.length != 0:
+                        aliases <<- s.aliases[0]
 
-                -- services <<- WorkerServices(host_id=w.host_id, worker_id=w.worker_id, services=?[aliases])
-        -- else:
-            -- services <<- WorkerServices(host_id=w.host_id, worker_id=nil, services=nil)
+                services <<- WorkerServices(host_id=w.host_id, worker_id=w.worker_id, services=?[aliases])
+        else:
+            services <<- WorkerServices(host_id=w.host_id, worker_id=nil, services=nil)
 
-    -- <- services
+    <- services
 
 
 -- local

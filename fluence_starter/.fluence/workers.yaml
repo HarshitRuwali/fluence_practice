@@ -5,3 +5,12 @@
 # Documentation: https://github.com/fluencelabs/cli/tree/main/docs/configs/workers.md
 
 version: 0
+
+deals:
+  dealName:
+    definition: bafkreigw2mv2sukwqpcqiomyw5upc4xbsbbqmly2sczk5dwfcgdirtic7i
+    timestamp: 2023-12-24T13:11:39.227Z
+    dealIdOriginal: "0xBEEd15F960Dd0F62A2D9412Ed621F5093A0F8FAF"
+    dealId: beed15f960dd0f62a2d9412ed621f5093a0f8faf
+    chainNetwork: kras
+    chainNetworkId: 80001
